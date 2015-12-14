@@ -608,4 +608,34 @@ fancyRpartPlot(fit)
 
 ![](Intro_to_R_files/figure-html/unnamed-chunk-23-1.png) 
 
+## Interactive Chart
+
+```r
+library(reshape2)
+GDP <- read.csv('GDP.csv')
+Population <- read.csv('Population.csv')
+
+GDP <- melt(GDP, id.vars='Year', variable.name='Country', value.name='GDP')
+Population <- melt(Population, id.vars='Year', variable.name='Country', value.name='Population')
+
+combined <- data.frame(Population, GDP)
+combined$GDP <- combined$GDP * 1000000
+combined$Population <- combined$Population * 1000
+combined$Per_Capita <- combined$GDP / combined$Population
+combined <- combined[!(combined$Country %in% c('Kuwait','UAE','Qatar')),]
+
+gg <- function(year) {
+  qplot(x=Per_Capita, y=GDP, size=log(Population,10), label=Country, data=combined[combined$Year==year,], log='y') + geom_text(hjust=-.5, size=3)
+}
+gg(1970)
+```
+
+![](Intro_to_R_files/figure-html/unnamed-chunk-24-1.png) 
+
+
+```r
+library(manipulate)
+manipulate(gg(year), year=slider(min=1970, max=2008, step=2))
+```
+
 ## Shiny App
