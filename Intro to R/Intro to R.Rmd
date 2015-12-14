@@ -1,0 +1,278 @@
+---
+title: "Introduction to R"
+author: "Yong Jun"
+date: "December 13, 2015"
+output: 
+  html_document:
+    keep_md: true
+---
+
+## Why R?
+- R & Python two of the most popular tools for data science work
+- R is a language designed for the purpose of statistical programming and visualization
+- It is a high level language
+    - meaning it abstracts you away from many of the nitty gritty of details of doing statistical computation)
+- It is open source
+- Rich community of users that contribute libraries to do almost anything you need
+
+## Difference with Python
+
+#### Python
+
+- General purpose programming language
+- Statistical computation supported through packages like *NumPy*, *SciPy*, *Panda* etc
+
+#### R
+
+- Designed for statistical programming
+- Has certain built-in design features that makes it suitable for this task
+
+## First, a bit on structured data
+
+- Structured data: SQL tables
+- Semi-structured: JSON, XML
+- Unstructured: Plain text, Image, Audio
+- Terminology:
+    - Tables
+    - Records: Row
+    - Fields: Columns
+- Each record has a **fixed set of fields**
+- Values within a field must be of the **same data type**
+    - Numeric
+    - String
+    - Date
+    - Categorical
+    - Binary
+
+```{r, echo=FALSE}
+data("mtcars")
+mtcars
+```
+
+## What I'll be covering
+
+There's so much to cover with regards to data science, machine learning or R but I don't have the time to go through all that. Plus there's also Python. So rather than taking a narrow focus of programming in R, I'll cover some of the special features in R that helps get you started in thinking about programming data science.
+
+## Things about R
+### Point 1: Everything is an Array
+
+In R, the most basic data object is the 1 dimension array (vector). Try this:
+
+Create an array:
+```{r}
+arr <- 1:10
+arr
+```
+
+Array can be indexed or subsetted:
+```{r, results='hold'}
+arr[7]
+arr[1:4]
+arr[c(1, 3, 5)]
+```
+
+Array operations:
+```{r, results='hold'}
+a <- 1:5
+b <- 6:10
+a + b
+b - a
+a * b
+a / 2
+a^2
+a %% 2 == 0
+```
+
+Vector can only have one data type:
+```{r}
+arr <- c(1, 'a', TRUE)
+arr
+typeof(arr)
+```
+
+Try creating a "scalar":
+```{r, results='hold'}
+scalar <- 9
+scalar
+scalar[1]
+length(scalar)
+```
+
+Try adding two arrays of different length
+```{r}
+a <- 1:10
+b <- 1:2
+rbind(a, b, sum=a+b)
+```
+
+Mapping a function
+```{r}
+f <- function (n) {
+  n * 2
+}
+f(a)
+```
+
+Reduce functions
+```{r, results='hold'}
+mean(a)
+min(a)
+max(a)
+```
+
+This feature of R abstract us away from manually doing element-wise operations on array. How array addition in usually carried out in without array operation. Example Javascript:
+```Javascript
+var toReturn = []
+for (var i = 0; i < a.length; i++) {
+  toReturn.push(a[i] + b[i])
+}
+console.log(toReturn)
+```
+
+Not saying this cannot be done in other languages but additional libraries are needed (eg. Python -> Numpy, Javascript -> math.js). Matlab also builds on this feature but R brings it one step further by completely doing away with scalar data types. So everything is a vector.
+
+### Point 2: R has data.frame
+
+Vectors in R can be used to represent columns of data in a table. But a table is made up of a group of columns each by themselves must be of one data type but within themselves can have different data types. How do we address this?
+
+Try using matrix:
+```{r, results='hold'}
+a <- 1:5
+b <- c('a', 'b', 'c', 'd', 'e')
+tb <- cbind(a, b)
+tb
+typeof(tb)
+```
+
+Not a good idea because matrix like array can have only one data types so the first column is converted to chracter type to match second column. The data structure in R that can support different data types is a **list**:
+```{r}
+tb <- list(a=a, b=b)
+tb
+```
+
+But tables have another constraint. Every column must be the same length. How do we make sure of this? In R, the answer comes in the form of **data.frame**:
+```{r, results='hold'}
+tb <- data.frame(a, b)
+tb
+x <- 1:2
+print(try(tb <- data.frame(a, b, x)))
+```
+
+So **data.frame** is a special type of **list** in R that enforces same length for every member. Of course it doesn't end there, **data.frame** has other features and behaviors useful for table-form data analysis.
+
+Subsetting a **data.frame**:
+```{r, results='hold'}
+typeof(mtcars)
+is.data.frame(mtcars)
+mtcars[mtcars$mpg > 25, ]
+```
+
+Selecting specific columns:
+```{r, results='hold'}
+mtcars[mtcars$mpg > 25, 1:3]
+mtcars[mtcars$mpg > 25, -(1:3)]
+mtcars[mtcars$mpg > 25, c('mpg', 'hp', 'wt')]
+```
+
+**data.frame** can be passed into many functions in R to for further analysis. For example visualizing with **ggplot**
+```{r}
+library(ggplot2)
+mtcars$cyl <- as.factor(mtcars$cyl)
+gg <- ggplot(data=mtcars, aes(x=hp, y=mpg))
+gg + geom_point(aes(color=cyl))
+```
+
+Python implements **data.frame** through the *Panda* library.
+
+### Point 3: Machine learning is made easy with R
+Say we want to model 'Miles Per Gallon' (mpg) as a function of 'Horse Power' (hp) by plotting a best fit straight line (i.e. linear regression):
+```{r}
+fit <- lm(mpg~hp, data=mtcars)
+summary(fit)
+gg + geom_point(aes(color=cyl)) +
+  geom_abline(intercept=fit$coefficients[1], slope=fit$coefficients[2])
+```
+
+Let's predict mpg of cars with hp of 100, 200 & 300:
+```{r}
+test <- data.frame(hp=c(100, 200, 300))
+predicted_mpg <- predict(fit, test)
+cbind(test, predicted_mpg)
+```
+
+How about adding transmission (auto/manual) as a predictor variable?
+```{r}
+mtcars$am <- as.factor(mtcars$am)
+levels(mtcars$am) <- c('Auto', 'Manual')
+fit <- lm(mpg~hp+am, data=mtcars)
+summary(fit)
+predicted_mpg <- predict(fit, mtcars)
+ggplot(data=mtcars, aes(x=hp, y=mpg, color=am)) + geom_point()  +
+  geom_line(aes(y=predicted_mpg))
+```
+
+Here, we demostrated a feature of R called **factor**. Which brings us to the next point
+
+### Point 4: R has a special way to handle categorical data - **factor**
+
+Factor converts an array of strings into integer representation
+```{r, results='hold'}
+data(iris)
+head(iris)
+summary(iris)
+str(iris)
+boxplot(Sepal.Length~Species, iris, col=c('red', 'dark orange', 'yellow'))
+```
+
+So you can see factor is an efficient way of storing categorical data. Factor is also useful for ordering and comparing nominal data (eg. First, Second, Third):
+```{r, results='hold'}
+orderedMonth <- c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun')
+unorderedMonth <- c('May', 'Mar', 'Jan', 'Apr', 'Feb', 'Jun')
+mon <- factor(unorderedMonth, levels=orderedMonth, ordered=TRUE)
+mon
+mon[1] > mon[2]
+mon[5] > mon[6]
+```
+
+Factor is also supported in Python through **Panda**
+
+## What are some interesting things R can do?
+
+### K-means clustering
+```{r}
+scaled_data <- scale(as.matrix(iris[,-5]))
+km <- kmeans(scaled_data, 3)
+iris$cluster <- as.factor(km$cluster)
+ggplot(data=iris, aes(x=Sepal.Length, y=Sepal.Width, color=cluster, shape=Species)) +
+  geom_point(size=5)
+```
+
+## Word Cloud
+```{r}
+library(wordcloud)
+library(zipfR)
+data("Brown.tfl")
+Brown_subset <- Brown.tfl[order(Brown.tfl$f, decreasing=TRUE),][1:150,]
+wordcloud(Brown_subset$type,
+          Brown_subset$f,
+          scale=c(7,1),
+          color=brewer.pal(8,'Dark2'),
+          random.order=FALSE,
+          random.color=TRUE,
+          rot.per=.3)
+```
+
+## Decision Tree
+```{r}
+library(rpart)
+library(rattle)
+data("swiss")
+head(swiss)
+summary(swiss)
+swiss$Infant.Mortality <- ifelse(swiss$Infant.Mortality > 20, '> 20', '<= 20')
+swiss$Infant.Mortality <- as.factor(swiss$Infant.Mortality)
+fit <- rpart(Infant.Mortality~., data=swiss)
+fancyRpartPlot(fit)
+```
+
+## Shiny App
