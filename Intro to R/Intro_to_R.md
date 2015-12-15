@@ -23,6 +23,7 @@ December 13, 2015
 - Designed for statistical programming
 - Has certain built-in design features that makes it suitable for this task
 - Functional (through use of generic functions)
+- R has [Hadley Wickham](http://priceonomics.com/hadley-wickham-the-man-who-revolutionized-r/)
 
 ## First, a bit on structured data
 
@@ -357,7 +358,7 @@ gg + geom_point(aes(color=cyl))
 
 ![](Intro_to_R_files/figure-html/unnamed-chunk-15-1.png) 
 
-Python implements **data.frame** through the *pandas* library. Scientific plotting in R is done using **matplotlib**.
+Python implements **data.frame** through the **pandas** library. Scientific plotting in R is done using **matplotlib**.
 
 ### Point 3: Machine learning is made easy with R
 Say we want to model 'Miles Per Gallon' (mpg) as a function of 'Horse Power' (hp) by plotting a best fit straight line (i.e. linear regression):
@@ -620,31 +621,59 @@ fancyRpartPlot(fit)
 ![](Intro_to_R_files/figure-html/unnamed-chunk-23-1.png) 
 
 ```r
-predict(fit, swiss, type='class')
+pred <- predict(fit, swiss, type='class')
+cbind(Actual=swiss$Infant.Mortality, Predicted=pred)
 ```
 
 ```
-##   Courtelary     Delemont Franches-Mnt      Moutier   Neuveville 
-##         > 20         > 20         > 20         > 20         > 20 
-##   Porrentruy        Broye        Glane      Gruyere       Sarine 
-##         > 20         > 20         > 20         > 20         > 20 
-##      Veveyse        Aigle      Aubonne     Avenches     Cossonay 
-##         > 20        <= 20        <= 20         > 20        <= 20 
-##    Echallens     Grandson     Lausanne    La Vallee       Lavaux 
-##        <= 20         > 20        <= 20        <= 20        <= 20 
-##       Morges       Moudon        Nyone         Orbe         Oron 
-##         > 20         > 20        <= 20        <= 20        <= 20 
-##      Payerne Paysd'enhaut        Rolle        Vevey      Yverdon 
-##         > 20        <= 20        <= 20         > 20         > 20 
-##      Conthey    Entremont       Herens     Martigwy      Monthey 
-##        <= 20        <= 20        <= 20        <= 20         > 20 
-##   St Maurice       Sierre         Sion       Boudry La Chauxdfnd 
-##        <= 20         > 20        <= 20         > 20         > 20 
-##     Le Locle    Neuchatel   Val de Ruz ValdeTravers V. De Geneve 
-##         > 20         > 20         > 20         > 20        <= 20 
-##  Rive Droite  Rive Gauche 
-##        <= 20        <= 20 
-## Levels: <= 20 > 20
+##              Actual Predicted
+## Courtelary        2         2
+## Delemont          2         2
+## Franches-Mnt      2         2
+## Moutier           2         2
+## Neuveville        2         2
+## Porrentruy        2         2
+## Broye             2         2
+## Glane             2         2
+## Gruyere           2         2
+## Sarine            2         2
+## Veveyse           2         2
+## Aigle             1         1
+## Aubonne           1         1
+## Avenches          2         2
+## Cossonay          1         1
+## Echallens         2         1
+## Grandson          1         2
+## Lausanne          2         1
+## La Vallee         1         1
+## Lavaux            1         1
+## Morges            1         2
+## Moudon            2         2
+## Nyone             1         1
+## Orbe              1         1
+## Oron              2         1
+## Payerne           2         2
+## Paysd'enhaut      1         1
+## Rolle             1         1
+## Vevey             2         2
+## Yverdon           2         2
+## Conthey           1         1
+## Entremont         1         1
+## Herens            1         1
+## Martigwy          1         1
+## Monthey           2         2
+## St Maurice        1         1
+## Sierre            1         2
+## Sion              1         1
+## Boudry            2         2
+## La Chauxdfnd      2         2
+## Le Locle          1         2
+## Neuchatel         2         2
+## Val de Ruz        1         2
+## ValdeTravers      1         2
+## V. De Geneve      1         1
+## Rive Droite       1         1
+## Rive Gauche       1         1
 ```
 
 ## Interactive Chart

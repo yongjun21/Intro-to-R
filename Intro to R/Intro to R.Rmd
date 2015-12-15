@@ -28,6 +28,7 @@ output:
 - Designed for statistical programming
 - Has certain built-in design features that makes it suitable for this task
 - Functional (through use of generic functions)
+- R has [Hadley Wickham](http://priceonomics.com/hadley-wickham-the-man-who-revolutionized-r/)
 
 ## First, a bit on structured data
 
@@ -190,7 +191,7 @@ gg <- ggplot(data=mtcars, aes(x=hp, y=mpg))
 gg + geom_point(aes(color=cyl))
 ```
 
-Python implements **data.frame** through the *pandas* library. Scientific plotting in R is done using **matplotlib**.
+Python implements **data.frame** through the **pandas** library. Scientific plotting in Python is done using **matplotlib**.
 
 ### Point 3: Machine learning is made easy with R
 Say we want to model 'Miles Per Gallon' (mpg) as a function of 'Horse Power' (hp) by plotting a best fit straight line (i.e. linear regression):
@@ -281,7 +282,8 @@ swiss$Infant.Mortality <- ifelse(swiss$Infant.Mortality > 20, '> 20', '<= 20')
 swiss$Infant.Mortality <- as.factor(swiss$Infant.Mortality)
 fit <- rpart(Infant.Mortality~., data=swiss)
 fancyRpartPlot(fit)
-predict(fit, swiss, type='class')
+pred <- predict(fit, swiss, type='class')
+cbind(Actual=swiss$Infant.Mortality, Predicted=pred)
 ```
 
 ## Interactive Chart
