@@ -20,12 +20,14 @@ output:
 #### Python
 
 - General purpose programming language
-- Statistical computation supported through packages like *NumPy*, *SciPy*, *Panda* etc
+- Statistical computation supported through packages like *NumPy*, *SciPy*, *pandas* etc
+- Object-oriented
 
 #### R
 
 - Designed for statistical programming
 - Has certain built-in design features that makes it suitable for this task
+- Functional (through use of generic functions)
 
 ## First, a bit on structured data
 
@@ -87,7 +89,7 @@ Vector can only have one data type:
 ```{r}
 arr <- c(1, 'a', TRUE)
 arr
-typeof(arr)
+class(arr)
 ```
 
 Try creating a "scalar":
@@ -115,9 +117,11 @@ f(a)
 
 Reduce functions
 ```{r, results='hold'}
+sum(a)
 mean(a)
 min(a)
 max(a)
+cumsum(a)
 ```
 
 This feature of R abstract us away from manually doing element-wise operations on array. How array addition in usually carried out in without array operation. Example Javascript:
@@ -131,6 +135,9 @@ console.log(toReturn)
 
 Not saying this cannot be done in other languages but additional libraries are needed (eg. Python -> Numpy, Javascript -> math.js). Matlab also builds on this feature but R brings it one step further by completely doing away with scalar data types. So everything is a vector.
 
+Good read to understand the rational for vectorization in R:
+[http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html](http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html)
+
 ### Point 2: R has data.frame
 
 Vectors in R can be used to represent columns of data in a table. But a table is made up of a group of columns each by themselves must be of one data type but within themselves can have different data types. How do we address this?
@@ -141,6 +148,7 @@ a <- 1:5
 b <- c('a', 'b', 'c', 'd', 'e')
 tb <- cbind(a, b)
 tb
+class(tb)
 typeof(tb)
 ```
 
@@ -163,7 +171,7 @@ So **data.frame** is a special type of **list** in R that enforces same length f
 Subsetting a **data.frame**:
 ```{r, results='hold'}
 typeof(mtcars)
-is.data.frame(mtcars)
+class(mtcars)
 mtcars[mtcars$mpg > 25, ]
 ```
 
@@ -182,7 +190,7 @@ gg <- ggplot(data=mtcars, aes(x=hp, y=mpg))
 gg + geom_point(aes(color=cyl))
 ```
 
-Python implements **data.frame** through the *Panda* library.
+Python implements **data.frame** through the *pandas* library. Scientific plotting in R is done using **matplotlib**.
 
 ### Point 3: Machine learning is made easy with R
 Say we want to model 'Miles Per Gallon' (mpg) as a function of 'Horse Power' (hp) by plotting a best fit straight line (i.e. linear regression):
@@ -234,7 +242,7 @@ mon[1] > mon[2]
 mon[5] > mon[6]
 ```
 
-Factor is also supported in Python through **Panda**
+Factor is also supported in Python through **pandas**
 
 ## What are some interesting things R can do?
 
@@ -273,6 +281,7 @@ swiss$Infant.Mortality <- ifelse(swiss$Infant.Mortality > 20, '> 20', '<= 20')
 swiss$Infant.Mortality <- as.factor(swiss$Infant.Mortality)
 fit <- rpart(Infant.Mortality~., data=swiss)
 fancyRpartPlot(fit)
+predict(fit, swiss, type='class')
 ```
 
 ## Interactive Chart

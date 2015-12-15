@@ -15,12 +15,14 @@ December 13, 2015
 #### Python
 
 - General purpose programming language
-- Statistical computation supported through packages like *NumPy*, *SciPy*, *Panda* etc
+- Statistical computation supported through packages like *NumPy*, *SciPy*, *pandas* etc
+- Object-oriented
 
 #### R
 
 - Designed for statistical programming
 - Has certain built-in design features that makes it suitable for this task
+- Functional (through use of generic functions)
 
 ## First, a bit on structured data
 
@@ -144,7 +146,7 @@ arr
 ```
 
 ```r
-typeof(arr)
+class(arr)
 ```
 
 ```
@@ -197,15 +199,19 @@ f(a)
 Reduce functions
 
 ```r
+sum(a)
 mean(a)
 min(a)
 max(a)
+cumsum(a)
 ```
 
 ```
+## [1] 55
 ## [1] 5.5
 ## [1] 1
 ## [1] 10
+##  [1]  1  3  6 10 15 21 28 36 45 55
 ```
 
 This feature of R abstract us away from manually doing element-wise operations on array. How array addition in usually carried out in without array operation. Example Javascript:
@@ -219,6 +225,9 @@ console.log(toReturn)
 
 Not saying this cannot be done in other languages but additional libraries are needed (eg. Python -> Numpy, Javascript -> math.js). Matlab also builds on this feature but R brings it one step further by completely doing away with scalar data types. So everything is a vector.
 
+Good read to understand the rational for vectorization in R:
+[http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html](http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html)
+
 ### Point 2: R has data.frame
 
 Vectors in R can be used to represent columns of data in a table. But a table is made up of a group of columns each by themselves must be of one data type but within themselves can have different data types. How do we address this?
@@ -230,6 +239,7 @@ a <- 1:5
 b <- c('a', 'b', 'c', 'd', 'e')
 tb <- cbind(a, b)
 tb
+class(tb)
 typeof(tb)
 ```
 
@@ -240,6 +250,7 @@ typeof(tb)
 ## [3,] "3" "c"
 ## [4,] "4" "d"
 ## [5,] "5" "e"
+## [1] "matrix"
 ## [1] "character"
 ```
 
@@ -287,13 +298,13 @@ Subsetting a **data.frame**:
 
 ```r
 typeof(mtcars)
-is.data.frame(mtcars)
+class(mtcars)
 mtcars[mtcars$mpg > 25, ]
 ```
 
 ```
 ## [1] "list"
-## [1] TRUE
+## [1] "data.frame"
 ##                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 ## Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
 ## Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
@@ -346,7 +357,7 @@ gg + geom_point(aes(color=cyl))
 
 ![](Intro_to_R_files/figure-html/unnamed-chunk-15-1.png) 
 
-Python implements **data.frame** through the *Panda* library.
+Python implements **data.frame** through the *pandas* library. Scientific plotting in R is done using **matplotlib**.
 
 ### Point 3: Machine learning is made easy with R
 Say we want to model 'Miles Per Gallon' (mpg) as a function of 'Horse Power' (hp) by plotting a best fit straight line (i.e. linear regression):
@@ -502,7 +513,7 @@ mon[5] > mon[6]
 ## [1] FALSE
 ```
 
-Factor is also supported in Python through **Panda**
+Factor is also supported in Python through **pandas**
 
 ## What are some interesting things R can do?
 
@@ -607,6 +618,34 @@ fancyRpartPlot(fit)
 ```
 
 ![](Intro_to_R_files/figure-html/unnamed-chunk-23-1.png) 
+
+```r
+predict(fit, swiss, type='class')
+```
+
+```
+##   Courtelary     Delemont Franches-Mnt      Moutier   Neuveville 
+##         > 20         > 20         > 20         > 20         > 20 
+##   Porrentruy        Broye        Glane      Gruyere       Sarine 
+##         > 20         > 20         > 20         > 20         > 20 
+##      Veveyse        Aigle      Aubonne     Avenches     Cossonay 
+##         > 20        <= 20        <= 20         > 20        <= 20 
+##    Echallens     Grandson     Lausanne    La Vallee       Lavaux 
+##        <= 20         > 20        <= 20        <= 20        <= 20 
+##       Morges       Moudon        Nyone         Orbe         Oron 
+##         > 20         > 20        <= 20        <= 20        <= 20 
+##      Payerne Paysd'enhaut        Rolle        Vevey      Yverdon 
+##         > 20        <= 20        <= 20         > 20         > 20 
+##      Conthey    Entremont       Herens     Martigwy      Monthey 
+##        <= 20        <= 20        <= 20        <= 20         > 20 
+##   St Maurice       Sierre         Sion       Boudry La Chauxdfnd 
+##        <= 20         > 20        <= 20         > 20         > 20 
+##     Le Locle    Neuchatel   Val de Ruz ValdeTravers V. De Geneve 
+##         > 20         > 20         > 20         > 20        <= 20 
+##  Rive Droite  Rive Gauche 
+##        <= 20        <= 20 
+## Levels: <= 20 > 20
+```
 
 ## Interactive Chart
 
