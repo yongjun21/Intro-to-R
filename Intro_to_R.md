@@ -709,8 +709,8 @@ cbind(Actual=swiss$Infant.Mortality, Predicted=pred)
 
 ```r
 library(reshape2)
-GDP <- read.csv('GDP.csv')
-Population <- read.csv('Population.csv')
+GDP <- read.csv('resources/GDP.csv')
+Population <- read.csv('resources/Population.csv')
 
 GDP <- melt(GDP, id.vars='Year', variable.name='Country', value.name='GDP')
 Population <- melt(Population, id.vars='Year', variable.name='Country', value.name='Population')
