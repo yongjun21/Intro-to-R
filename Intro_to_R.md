@@ -215,7 +215,7 @@ cumsum(a)
 ##  [1]  1  3  6 10 15 21 28 36 45 55
 ```
 
-This feature of R abstract us away from manually doing element-wise operations on array. How array addition in usually carried out in without array operation. Example Javascript:
+This feature of R abstract us away from manually doing element-wise operations on array. How array addition in usually carried out in languages without array operation (example Javascript):
 ```Javascript
 var toReturn = []
 for (var i = 0; i < a.length; i++) {
@@ -275,8 +275,6 @@ But tables have another constraint. Every column must be the same length. How do
 ```r
 tb <- data.frame(a, b)
 tb
-x <- 1:2
-print(try(tb <- data.frame(a, b, x)))
 ```
 
 ```
@@ -286,6 +284,15 @@ print(try(tb <- data.frame(a, b, x)))
 ## 3 3 c
 ## 4 4 d
 ## 5 5 e
+```
+
+
+```r
+x <- 1:2
+print(try(tb <- data.frame(a, b, x)))
+```
+
+```
 ## [1] "Error in data.frame(a, b, x) : \n  arguments imply differing number of rows: 5, 2\n"
 ## attr(,"class")
 ## [1] "try-error"
@@ -356,9 +363,9 @@ gg <- ggplot(data=mtcars, aes(x=hp, y=mpg))
 gg + geom_point(aes(color=cyl))
 ```
 
-![](Intro_to_R_files/figure-html/unnamed-chunk-15-1.png) 
+![](Intro_to_R_files/figure-html/unnamed-chunk-16-1.png) 
 
-Python implements **data.frame** through the **pandas** library. Scientific plotting in R is done using **matplotlib**.
+Python implements **data.frame** through the **pandas** library. Scientific plotting in Python is done using **matplotlib**.
 
 ### Point 3: Machine learning is made easy with R
 Say we want to model 'Miles Per Gallon' (mpg) as a function of 'Horse Power' (hp) by plotting a best fit straight line (i.e. linear regression):
@@ -394,7 +401,7 @@ gg + geom_point(aes(color=cyl)) +
   geom_abline(intercept=fit$coefficients[1], slope=fit$coefficients[2])
 ```
 
-![](Intro_to_R_files/figure-html/unnamed-chunk-16-1.png) 
+![](Intro_to_R_files/figure-html/unnamed-chunk-17-1.png) 
 
 Let's predict mpg of cars with hp of 100, 200 & 300:
 
@@ -448,7 +455,7 @@ ggplot(data=mtcars, aes(x=hp, y=mpg, color=am)) + geom_point()  +
   geom_line(aes(y=predicted_mpg))
 ```
 
-![](Intro_to_R_files/figure-html/unnamed-chunk-18-1.png) 
+![](Intro_to_R_files/figure-html/unnamed-chunk-19-1.png) 
 
 Here, we demostrated a feature of R called **factor**. Which brings us to the next point
 
@@ -459,12 +466,7 @@ Factor converts an array of strings into integer representation
 ```r
 data(iris)
 head(iris)
-summary(iris)
-str(iris)
-boxplot(Sepal.Length~Species, iris, col=c('red', 'dark orange', 'yellow'))
 ```
-
-![](Intro_to_R_files/figure-html/unnamed-chunk-19-1.png) 
 
 ```
 ##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
@@ -474,6 +476,13 @@ boxplot(Sepal.Length~Species, iris, col=c('red', 'dark orange', 'yellow'))
 ## 4          4.6         3.1          1.5         0.2  setosa
 ## 5          5.0         3.6          1.4         0.2  setosa
 ## 6          5.4         3.9          1.7         0.4  setosa
+```
+
+```r
+summary(iris)
+```
+
+```
 ##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 ##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
 ##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
@@ -487,7 +496,14 @@ boxplot(Sepal.Length~Species, iris, col=c('red', 'dark orange', 'yellow'))
 ##  virginica :50  
 ##                 
 ##                 
-##                 
+## 
+```
+
+```r
+str(iris)
+```
+
+```
 ## 'data.frame':	150 obs. of  5 variables:
 ##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
 ##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
@@ -496,6 +512,12 @@ boxplot(Sepal.Length~Species, iris, col=c('red', 'dark orange', 'yellow'))
 ##  $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
 ```
 
+```r
+boxplot(Sepal.Length~Species, iris, col=c('red', 'dark orange', 'yellow'))
+```
+
+![](Intro_to_R_files/figure-html/unnamed-chunk-20-1.png) 
+
 So you can see factor is an efficient way of storing categorical data. Factor is also useful for ordering and comparing nominal data (eg. First, Second, Third):
 
 ```r
@@ -503,13 +525,20 @@ orderedMonth <- c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun')
 unorderedMonth <- c('May', 'Mar', 'Jan', 'Apr', 'Feb', 'Jun')
 mon <- factor(unorderedMonth, levels=orderedMonth, ordered=TRUE)
 mon
-mon[1] > mon[2]
-mon[5] > mon[6]
 ```
 
 ```
 ## [1] May Mar Jan Apr Feb Jun
 ## Levels: Jan < Feb < Mar < Apr < May < Jun
+```
+
+
+```r
+mon[1] > mon[2]
+mon[5] > mon[6]
+```
+
+```
 ## [1] TRUE
 ## [1] FALSE
 ```
@@ -528,7 +557,7 @@ ggplot(data=iris, aes(x=Sepal.Length, y=Sepal.Width, color=cluster, shape=Specie
   geom_point(size=5)
 ```
 
-![](Intro_to_R_files/figure-html/unnamed-chunk-21-1.png) 
+![](Intro_to_R_files/figure-html/unnamed-chunk-23-1.png) 
 
 ## Word Cloud
 
@@ -553,7 +582,7 @@ wordcloud(Brown_subset$type,
           rot.per=.3)
 ```
 
-![](Intro_to_R_files/figure-html/unnamed-chunk-22-1.png) 
+![](Intro_to_R_files/figure-html/unnamed-chunk-24-1.png) 
 
 ## Decision Tree
 
@@ -618,7 +647,7 @@ fit <- rpart(Infant.Mortality~., data=swiss)
 fancyRpartPlot(fit)
 ```
 
-![](Intro_to_R_files/figure-html/unnamed-chunk-23-1.png) 
+![](Intro_to_R_files/figure-html/unnamed-chunk-25-1.png) 
 
 ```r
 pred <- predict(fit, swiss, type='class')
@@ -698,7 +727,7 @@ gg <- function(year) {
 gg(1970)
 ```
 
-![](Intro_to_R_files/figure-html/unnamed-chunk-24-1.png) 
+![](Intro_to_R_files/figure-html/unnamed-chunk-26-1.png) 
 
 
 ```r
@@ -707,3 +736,6 @@ manipulate(gg(year), year=slider(min=1970, max=2008, step=2))
 ```
 
 ## Shiny App
+
+- [Example 1](https://github.com/yongjun21/DevelopDataProducts)
+- [Example 2](https://github.com/yongjun21/DataScienceCapstone)

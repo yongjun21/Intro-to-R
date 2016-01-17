@@ -125,7 +125,7 @@ max(a)
 cumsum(a)
 ```
 
-This feature of R abstract us away from manually doing element-wise operations on array. How array addition in usually carried out in without array operation. Example Javascript:
+This feature of R abstract us away from manually doing element-wise operations on array. How array addition in usually carried out in languages without array operation (example Javascript):
 ```Javascript
 var toReturn = []
 for (var i = 0; i < a.length; i++) {
@@ -163,6 +163,9 @@ But tables have another constraint. Every column must be the same length. How do
 ```{r, results='hold'}
 tb <- data.frame(a, b)
 tb
+```
+
+```{r, results='hold'}
 x <- 1:2
 print(try(tb <- data.frame(a, b, x)))
 ```
@@ -225,7 +228,7 @@ Here, we demostrated a feature of R called **factor**. Which brings us to the ne
 ### Point 4: R has a special way to handle categorical data - **factor**
 
 Factor converts an array of strings into integer representation
-```{r, results='hold'}
+```{r}
 data(iris)
 head(iris)
 summary(iris)
@@ -234,11 +237,14 @@ boxplot(Sepal.Length~Species, iris, col=c('red', 'dark orange', 'yellow'))
 ```
 
 So you can see factor is an efficient way of storing categorical data. Factor is also useful for ordering and comparing nominal data (eg. First, Second, Third):
-```{r, results='hold'}
+```{r}
 orderedMonth <- c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun')
 unorderedMonth <- c('May', 'Mar', 'Jan', 'Apr', 'Feb', 'Jun')
 mon <- factor(unorderedMonth, levels=orderedMonth, ordered=TRUE)
 mon
+```
+
+```{r, results='hold'}
 mon[1] > mon[2]
 mon[5] > mon[6]
 ```
@@ -313,3 +319,6 @@ manipulate(gg(year), year=slider(min=1970, max=2008, step=2))
 ```
 
 ## Shiny App
+
+- [Example 1](https://github.com/yongjun21/DevelopDataProducts)
+- [Example 2](https://github.com/yongjun21/DataScienceCapstone)
